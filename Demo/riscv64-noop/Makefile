@@ -38,8 +38,6 @@ SDK_SRC := \
 	$(SDK_DIR)/libwrap/stdlib/malloc.c \
 	$(SDK_DIR)/libwrap/misc/write_hex.c \
 	$(SDK_DIR)/env/freedom-e300-hifive1/init.c \
-	$(SDK_DIR)/drivers/plic/plic_driver.c \
-	$(SDK_DIR)/drivers/fe300prci/fe300prci_driver.c \
 	$(SDK_DIR)/drivers/uart/uart.c
 
 SDK_ASM := \
