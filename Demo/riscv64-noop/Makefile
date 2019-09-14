@@ -39,7 +39,8 @@ SDK_SRC := \
 	$(SDK_DIR)/libwrap/misc/write_hex.c \
 	$(SDK_DIR)/env/freedom-e300-hifive1/init.c \
 	$(SDK_DIR)/drivers/plic/plic_driver.c \
-	$(SDK_DIR)/drivers/fe300prci/fe300prci_driver.c
+	$(SDK_DIR)/drivers/fe300prci/fe300prci_driver.c \
+	$(SDK_DIR)/drivers/uart/uart.c
 
 SDK_ASM := \
 	$(SDK_DIR)/env/entry.S \
@@ -53,7 +54,8 @@ VPATH += \
 	$(SDK_DIR)/libwrap/misc \
 	$(SDK_DIR)/libwrap/stdlib \
 	$(SDK_DIR)/drivers/plic \
-	$(SDK_DIR)/drivers/fe300prci
+	$(SDK_DIR)/drivers/fe300prci \
+	$(SDK_DIR)/drivers/uart
 
 PORT_OBJS := $(patsubst %.c,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(ARCH_PORTABLE_SRC)))
 PORT_OBJS += $(patsubst %.S,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(ARCH_PORTABLE_ASM)))
@@ -181,6 +183,7 @@ $(OUT_ELF): $(OUT_OBJS)
 	$(GCC) $(LDFLAGS) $(LDOPTS) -o $@ $(OUT_OBJS) $(LIB_FLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
+	$(OBJDUMP) -d $@ > $@.txt
 
 .PHONY:  build_lib
 
@@ -191,7 +194,7 @@ clean:
 	rm -rv $(BUILD_DIR)
 
 sim-qemu: $(OUT_ELF)
-	qemu-system-riscv32 -kernel $^  -S -s -machine sifive_e
+	qemu-system-riscv32 -kernel $^  -S -s -machine virt # sifive_e
 
 gdb: $(OUT_ELF)
 	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv32" -iex "set riscv use_compressed_breakpoint off"

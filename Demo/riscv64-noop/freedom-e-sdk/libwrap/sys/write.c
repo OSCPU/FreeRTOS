@@ -15,13 +15,14 @@ ssize_t __wrap_write(int fd, const void* ptr, size_t len)
 
   if (isatty(fd)) {
     for (size_t jj = 0; jj < len; jj++) {
-      while (UART0_REG(UART_REG_TXFIFO) & 0x80000000) ;
-      UART0_REG(UART_REG_TXFIFO) = current[jj];
+      uart_putc(current[jj]);
+      //while (UART0_REG(UART_REG_TXFIFO) & 0x80000000) ;
+      //UART0_REG(UART_REG_TXFIFO) = current[jj];
 
-      if (current[jj] == '\n') {
-        while (UART0_REG(UART_REG_TXFIFO) & 0x80000000) ;
-        UART0_REG(UART_REG_TXFIFO) = '\r';
-      }
+      //if (current[jj] == '\n') {
+      //  while (UART0_REG(UART_REG_TXFIFO) & 0x80000000) ;
+      //  UART0_REG(UART_REG_TXFIFO) = '\r';
+      //}
     }
     return len;
   }

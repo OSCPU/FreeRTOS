@@ -47,9 +47,9 @@ unsigned long get_timer_freq()
 static void use_hfrosc(int div, int trim)
 {
   // Make sure the HFROSC is running at its default setting
-  PRCI_REG(PRCI_HFROSCCFG) = (ROSC_DIV(div) | ROSC_TRIM(trim) | ROSC_EN(1));
-  while ((PRCI_REG(PRCI_HFROSCCFG) & ROSC_RDY(1)) == 0) ;
-  PRCI_REG(PRCI_PLLCFG) &= ~PLL_SEL(1);
+  //PRCI_REG(PRCI_HFROSCCFG) = (ROSC_DIV(div) | ROSC_TRIM(trim) | ROSC_EN(1));
+  //while ((PRCI_REG(PRCI_HFROSCCFG) & ROSC_RDY(1)) == 0) ;
+  //PRCI_REG(PRCI_PLLCFG) &= ~PLL_SEL(1);
 }
 
 static void use_pll(int refsel, int bypass, int r, int f, int q)
@@ -175,13 +175,13 @@ unsigned long get_cpu_freq()
   return cpu_freq;
 }
 
-static void uart_init(size_t baud_rate)
-{
-  GPIO_REG(GPIO_IOF_SEL) &= ~IOF0_UART0_MASK;
-  GPIO_REG(GPIO_IOF_EN) |= IOF0_UART0_MASK;
-  UART0_REG(UART_REG_DIV) = get_cpu_freq() / baud_rate - 1;
-  UART0_REG(UART_REG_TXCTRL) |= UART_TXEN;
-}
+//static void uart_init(size_t baud_rate)
+//{
+//  GPIO_REG(GPIO_IOF_SEL) &= ~IOF0_UART0_MASK;
+//  GPIO_REG(GPIO_IOF_EN) |= IOF0_UART0_MASK;
+//  UART0_REG(UART_REG_DIV) = get_cpu_freq() / baud_rate - 1;
+//  UART0_REG(UART_REG_TXCTRL) |= UART_TXEN;
+//}
 
 
 
@@ -218,9 +218,10 @@ void _init()
 {
   
   #ifndef NO_INIT
-  use_default_clocks();
-  use_pll(0, 0, 1, 31, 1);
-  uart_init(115200);
+  //use_default_clocks();
+  //use_pll(0, 0, 1, 31, 1);
+  //uart_init(115200);
+  uart_init();
 
   printf("core freq at %d Hz\n", (int)get_cpu_freq());
 
