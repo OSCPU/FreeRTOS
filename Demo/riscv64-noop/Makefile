@@ -37,23 +37,19 @@ SDK_SRC := \
 	$(SDK_DIR)/libwrap/sys/write.c \
 	$(SDK_DIR)/libwrap/stdlib/malloc.c \
 	$(SDK_DIR)/libwrap/misc/write_hex.c \
-	$(SDK_DIR)/env/freedom-e300-hifive1/init.c \
-	$(SDK_DIR)/drivers/uart/uart.c
+	$(SDK_DIR)/init.c \
+	$(SDK_DIR)/uart.c
 
 SDK_ASM := \
-	$(SDK_DIR)/env/entry.S \
-	$(SDK_DIR)/env/start.S
+	$(SDK_DIR)/entry.S \
+	$(SDK_DIR)/start.S
 SDK_OBJS := $(patsubst %.c,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(SDK_SRC)))
 SDK_OBJS += $(patsubst %.S,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(SDK_ASM)))
 VPATH += \
-	$(SDK_DIR)/env \
-	$(SDK_DIR)/env/freedom-e300-hifive1 \
+	$(SDK_DIR) \
 	$(SDK_DIR)/libwrap/sys \
 	$(SDK_DIR)/libwrap/misc \
-	$(SDK_DIR)/libwrap/stdlib \
-	$(SDK_DIR)/drivers/plic \
-	$(SDK_DIR)/drivers/fe300prci \
-	$(SDK_DIR)/drivers/uart
+	$(SDK_DIR)/libwrap/stdlib
 
 PORT_OBJS := $(patsubst %.c,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(ARCH_PORTABLE_SRC)))
 PORT_OBJS += $(patsubst %.S,$(FREERTOS_BUILD_DIR)/%.o,$(notdir $(ARCH_PORTABLE_ASM)))
@@ -76,8 +72,6 @@ APP_ASM = \
 APP_INCLUDES = \
 	-I ./ \
 	-I $(SDK_DIR)/include \
-	-I $(SDK_DIR)/env/freedom-e300-hifive1 \
-	-I $(SDK_DIR)/env \
 	-I $(FREERTOS_INC) \
 	-I $(ARCH_PORTABLE_INC) \
 	-I $(FREERTOS_DIR)/Demo/Common/include
@@ -109,9 +103,6 @@ FREERTOS_INCLUDES += \
 	-I ./ \
 	-I $(ARCH_PORTABLE_INC) \
 	-I $(SDK_DIR)/include \
-	-I $(SDK_DIR)/env/freedom-e300-hifive1 \
-	-I $(SDK_DIR)/env \
-	-I $(SDK_DIR)/drivers \
 	-I $(FREERTOS_DIR)/Demo/Common/include \
 	-I $(FREERTOS_SOURCE_DIR)/portable/GCC/RISC-V/chip_specific_extensions/RV32I_CLINT_no_extensions
 

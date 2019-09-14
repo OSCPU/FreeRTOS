@@ -4,7 +4,7 @@
 #define ENTRY_S
 
 #include "encoding.h"
-#include "sifive/bits.h"
+#include "bits.h"
 
   .section      .text.entry	
   .align 2

@@ -6,9 +6,9 @@
 BUILD_DIR = ./build
 CROSS_COMPILE_PREFIX = riscv32-unknown-elf
 
-SDK_DIR = ./freedom-e-sdk
+SDK_DIR = ./noop
 
-LINKER_SCRIPT = $(SDK_DIR)/env/freedom-e300-hifive1/flash.lds
+LINKER_SCRIPT = $(SDK_DIR)/flash.lds
 #-----------------------------------------------------------
 GCC     = $(CROSS_COMPILE_PREFIX)-gcc
 OBJCOPY = $(CROSS_COMPILE_PREFIX)-objcopy

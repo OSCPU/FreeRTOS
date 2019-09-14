@@ -1,7 +1,7 @@
 // See LICENSE for license details
 
-#ifndef _SIFIVE_CLINT_H
-#define _SIFIVE_CLINT_H
+#ifndef _CLINT_H
+#define _CLINT_H
 
 
 #define CLINT_MSIP 0x0000
@@ -11,4 +11,4 @@
 #define CLINT_MTIME 0xBFF8
 #define CLINT_MTIME_size 0x8
 
-#endif /* _SIFIVE_CLINT_H */ 
+#endif /* _CLINT_H */ 
