@@ -8,7 +8,7 @@ BUILD_DIR = ./build
 CROSS_COMPILE_PREFIX = riscv64-unknown-elf
 USE_RV64 = 1
 
-SDK_DIR = ./noop
+SDK_DIR = ./qemu
 
 LINKER_SCRIPT = $(SDK_DIR)/flash.lds
 #-----------------------------------------------------------
