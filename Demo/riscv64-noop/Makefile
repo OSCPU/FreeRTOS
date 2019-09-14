@@ -182,8 +182,14 @@ $(BUILD_DIRECTORIES):
 clean:
 	rm -rv $(BUILD_DIR)
 
+ifdef USE_RV64
+BITS = 64
+else
+BITS = 32
+endif
+
 sim-qemu: $(OUT_ELF)
-	qemu-system-riscv32 -kernel $^  -S -s -machine virt # sifive_e
+	qemu-system-riscv$(BITS) -kernel $^  -S -s -machine virt
 
 gdb: $(OUT_ELF)
-	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv32" -iex "set riscv use_compressed_breakpoint off"
+	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv$(BITS)" -iex "set riscv use_compressed_breakpoint off"

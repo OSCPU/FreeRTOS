@@ -4,7 +4,9 @@
 #
 
 BUILD_DIR = ./build
-CROSS_COMPILE_PREFIX = riscv32-unknown-elf
+
+CROSS_COMPILE_PREFIX = riscv64-unknown-elf
+USE_RV64 = 1
 
 SDK_DIR = ./noop
 
@@ -18,7 +20,11 @@ RANLIB  = $(CROSS_COMPILE_PREFIX)-ranlib
 GDB     = $(CROSS_COMPILE_PREFIX)-gdb
 
 # if using the multi-arch (riscv64-unknown-elf-gcc):
+ifdef USE_RV64
+ARCH_FLAGS = -march=rv64imac -mabi=lp64 -mcmodel=medany
+else
 ARCH_FLAGS = -march=rv32imac -mabi=ilp32 -mcmodel=medany
+endif
 # Basic CFLAGS:
 CFLAGS  = -Wall -Wextra -O0 -g3 -msmall-data-limit=8 -std=gnu11
 CFLAGS += -ffunction-sections -fdata-sections -fno-builtin-printf
@@ -40,6 +46,7 @@ ASMFLAGS += -MT"$@" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 LDFLAGS :=  -Xlinker --gc-sections -Xlinker --defsym=__stack_size=1K
 LDFLAGS += -O0 -g3
 LDFLAGS += -ffunction-sections -fdata-sections --specs=nano.specs
+LDFLAGS += $(ARCH_FLAGS)
 LDFLAGS += -nostartfiles
 LDFLAGS += -T $(LINKER_SCRIPT)
 LDFLAGS += -L../
