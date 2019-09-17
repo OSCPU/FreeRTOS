@@ -14,7 +14,7 @@ void uart_putc(uint8_t ch) {
 }
 
 int uart_getc(void) {
-  if ((uart[REG_LINESTAT] & REG_STATUS_RX) == 0) {
+  if (uart[REG_LINESTAT] & REG_STATUS_RX) {
     return uart[REG_QUEUE];
   }
   return -1;
