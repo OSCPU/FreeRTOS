@@ -189,7 +189,7 @@ BITS = 32
 endif
 
 sim-qemu: $(OUT_ELF)
-	qemu-system-riscv$(BITS) -kernel $^  -S -s -machine virt
+	qemu-system-riscv$(BITS) -nographic -kernel $^  -machine virt
 
 gdb: $(OUT_ELF)
 	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv$(BITS)" -iex "set riscv use_compressed_breakpoint off"
