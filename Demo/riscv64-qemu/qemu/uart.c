@@ -1,6 +1,6 @@
 #include "platform.h"
 
-static volatile uint8_t *uart = (void *)0x10000000;
+static volatile uint8_t *uart = (void *)UART0_CTRL_ADDR;
 
 #define REG_QUEUE     0
 #define REG_LINESTAT  5

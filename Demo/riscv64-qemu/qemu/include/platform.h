@@ -9,6 +9,7 @@
 
 // Memory map
 #define CLINT_CTRL_ADDR _AC(0x02000000,UL)
+#define UART0_CTRL_ADDR _AC(0x10000000,UL)
 
 unsigned long get_cpu_freq(void);
 unsigned long get_timer_freq(void);
