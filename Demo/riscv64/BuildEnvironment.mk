@@ -8,7 +8,7 @@ BUILD_DIR = ./build
 CROSS_COMPILE_PREFIX = riscv64-unknown-elf
 USE_RV64 = 1
 
-SDK_DIR = ./nemu
+SDK_DIR = ./riscv64
 
 LINKER_SCRIPT = $(SDK_DIR)/flash.lds
 #-----------------------------------------------------------
@@ -26,7 +26,7 @@ else
 ARCH_FLAGS = -march=rv32imac -mabi=ilp32 -mcmodel=medany
 endif
 # Basic CFLAGS:
-CFLAGS  = -Wall -Wextra -Os -g3 -msmall-data-limit=8 -std=gnu11
+CFLAGS  = -Wall -Wextra -O0 -g3 -msmall-data-limit=8 -std=gnu11
 CFLAGS += -ffunction-sections -fdata-sections -fno-builtin-printf
 CFLAGS += -DDONT_USE_PLIC -DDONT_USE_M_TIME
 CFLAGS += -include sys/cdefs.h
@@ -34,7 +34,7 @@ CFLAGS += $(ARCH_FLAGS)
 # These flags are for outputing *.d dependency files for make
 CFLAGS += -MT"$@" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
-ASMFLAGS =  -Os -g3
+ASMFLAGS =  -O0 -g3
 ASMFLAGS += $(ARCH_FLAGS)
 ASMFLAGS += -DportasmHANDLE_INTERRUPT=handle_trap
 ASMFLAGS += -msmall-data-limit=8
@@ -44,7 +44,7 @@ ASMFLAGS += -MT"$@" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)"
 
 # Linker arguments __________________________________________
 LDFLAGS :=  -Xlinker --gc-sections -Xlinker --defsym=__stack_size=1K
-LDFLAGS += -Os -g3
+LDFLAGS += -O0 -g3
 LDFLAGS += -ffunction-sections -fdata-sections --specs=nano.specs
 LDFLAGS += $(ARCH_FLAGS)
 LDFLAGS += -nostartfiles

@@ -38,7 +38,7 @@ SDK_SRC := \
 	$(SDK_DIR)/libwrap/stdlib/malloc.c \
 	$(SDK_DIR)/libwrap/misc/write_hex.c \
 	$(SDK_DIR)/init.c \
-	nemu/uart.c
+	$(SDK_DIR)/uart.c
 
 SDK_ASM := \
 	$(SDK_DIR)/entry.S \
@@ -58,9 +58,16 @@ VPATH += $(FREERTOS_SOURCE_DIR)/portable/GCC/$(ARCH)
 
 
 CFLAGS += -DportasmHANDLE_INTERRUPT=$(INTERRUPT_HANDLER)
+ifeq ($(MAKECMDGOALS),qemu)
+	CFLAGS += -D__QEMU__
+else ifeq ($(MAKECMDGOALS),nemu)
+	CFLAGS += -D__NEMU__
+else ifeq ($(MAKECMDGOALS),noop)
+	CFLAGS += -D__NOOP__
+endif
 
 # Set up application source, include, and object files for compilation: ______________________
-APP_SRC_DIR = ../riscv64-qemu
+APP_SRC_DIR = .
 APP_SRC = \
 	$(APP_SRC_DIR)/main.c \
 	$(APP_SRC_DIR)/blinky_demo/main_blinky.c \
@@ -124,7 +131,6 @@ directories: $(BUILD_DIRECTORIES)
 app_compile: directories $(APP_OBJS)
 frtos_compile: directories $(FREERTOS_OBJS)
 out_elf: directories $(OUT_ELF)
-	echo fjlsdkf
 
 # Notes
 # Each "Module" needs
@@ -144,24 +150,28 @@ out_elf: directories $(OUT_ELF)
 $(APP_BUILD_DIR)/%.o : %.c
 	@echo "[APP Objects] : $@ ______________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(CFLAGS) $(APP_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(APP_BUILD_DIR)/%.o : %.S
 	@echo "[APP Objects] : $@ ______________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(ASMFLAGS) $(APP_INCLUDES) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(FREERTOS_BUILD_DIR)/%.o : %.c
 	@echo "[FreeRTOS Objects] : $@ __________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(CFLAGS) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(FREERTOS_BUILD_DIR)/%.o : %.S
 	@echo "[FreeRTOS Objects] : $@ __________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(ASMFLAGS) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
@@ -170,10 +180,11 @@ $(OUT_ELF): $(OUT_OBJS)
 	@echo '___________________________________________________________________________________'
 	@echo 'Building target: $@'
 	@echo '_______________________________'
+	@mkdir -p $(@D)
 	$(GCC) $(LDFLAGS) $(LDOPTS) -o $@ $(OUT_OBJS) $(LIB_FLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
-	$(OBJDUMP) -dS $@ > $@.txt
+	$(OBJDUMP) -d $@ > $@.txt
 	$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $@ $@.bin
 
 .PHONY:  build_lib
@@ -190,5 +201,14 @@ else
 BITS = 32
 endif
 
-run: $(OUT_ELF)
+qemu: $(OUT_ELF)
+	qemu-system-riscv$(BITS) -nographic -kernel $^  -machine virt
+
+nemu: $(OUT_ELF)
 	$(MAKE) -C $(NEMU_HOME) ISA=riscv$(BITS) run ARGS="-b $(abspath $<.bin)"
+
+noop: $(OUT_ELF)
+	$(MAKE) -C $(NOOP_HOME) emu IMAGE="$(abspath $<.bin)"
+
+gdb: $(OUT_ELF)
+	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv$(BITS)" -iex "set riscv use_compressed_breakpoint off"
