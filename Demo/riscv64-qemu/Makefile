@@ -143,24 +143,28 @@ out_elf: directories $(OUT_ELF)
 $(APP_BUILD_DIR)/%.o : %.c
 	@echo "[APP Objects] : $@ ______________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(CFLAGS) $(APP_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(APP_BUILD_DIR)/%.o : %.S
 	@echo "[APP Objects] : $@ ______________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(ASMFLAGS) $(APP_INCLUDES) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(FREERTOS_BUILD_DIR)/%.o : %.c
 	@echo "[FreeRTOS Objects] : $@ __________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(CFLAGS) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
 $(FREERTOS_BUILD_DIR)/%.o : %.S
 	@echo "[FreeRTOS Objects] : $@ __________________________________________________________"
 	@echo "Building: $<"
+	@mkdir -p $(@D)
 	$(GCC) $(ASMFLAGS) $(FREERTOS_INCLUDES) -o $@ -c $<
 	@echo "Finished Building: $<"
 
@@ -169,6 +173,7 @@ $(OUT_ELF): $(OUT_OBJS)
 	@echo '___________________________________________________________________________________'
 	@echo 'Building target: $@'
 	@echo '_______________________________'
+	@mkdir -p $(@D)
 	$(GCC) $(LDFLAGS) $(LDOPTS) -o $@ $(OUT_OBJS) $(LIB_FLAGS)
 	@echo 'Finished building target: $@'
 	@echo ' '
