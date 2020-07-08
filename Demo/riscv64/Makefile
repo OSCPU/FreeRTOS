@@ -62,8 +62,8 @@ ifeq ($(MAKECMDGOALS),qemu)
 	CFLAGS += -D__QEMU__
 else ifeq ($(MAKECMDGOALS),nemu)
 	CFLAGS += -D__NEMU__
-else ifeq ($(MAKECMDGOALS),noop)
-	CFLAGS += -D__NOOP__
+else ifeq ($(MAKECMDGOALS),nutshell)
+	CFLAGS += -D__NUTSHELL__
 endif
 
 # Set up application source, include, and object files for compilation: ______________________
@@ -207,8 +207,8 @@ qemu: $(OUT_ELF)
 nemu: $(OUT_ELF)
 	$(MAKE) -C $(NEMU_HOME) ISA=riscv$(BITS) run ARGS="-b $(abspath $<.bin)"
 
-noop: $(OUT_ELF)
-	$(MAKE) -C $(NOOP_HOME) emu IMAGE="$(abspath $<.bin)"
+nutshell: $(OUT_ELF)
+	$(MAKE) -C $(NUTSHELL_HOME) emu IMAGE="$(abspath $<.bin)"
 
 gdb: $(OUT_ELF)
 	$(GDB) -iex "set mem inaccessible-by-default off" -iex "set arch riscv:rv$(BITS)" -iex "set riscv use_compressed_breakpoint off"

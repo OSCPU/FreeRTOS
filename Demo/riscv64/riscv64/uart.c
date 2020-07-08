@@ -2,7 +2,7 @@
 
 static volatile uint8_t *uart = (void *)UART0_CTRL_ADDR;
 
-#ifndef __NOOP__
+#ifndef __NUTSHELL__
 
 #define REG_QUEUE     0
 #define REG_LINESTAT  5

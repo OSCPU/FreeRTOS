@@ -14,7 +14,7 @@
 #elif defined(__NEMU__)
 # define CLINT_CTRL_ADDR _AC(0xa2000000,UL)
 # define UART0_CTRL_ADDR _AC(0xa10003f8,UL)
-#elif defined(__NOOP__)
+#elif defined(__NUTSHELL__)
 # define CLINT_CTRL_ADDR _AC(0x40700000,UL)
 # define UART0_CTRL_ADDR _AC(0x40600000,UL)
 #endif
